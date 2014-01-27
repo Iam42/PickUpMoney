@@ -31,7 +31,7 @@ public class FlakeView extends View implements View.OnTouchListener{
     private final int FLAKECOUNT = 30;
     private final int LASTTIME = 10;
 
-    Bitmap droid;       // The bitmap that all flakes use
+    ArrayList<Bitmap> droids;       // The bitmap that all flakes use
     ArrayList<Flake> flakes = new ArrayList<Flake>(); // List of current flakes
     ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     long startTime, prevTime; // Used to track elapsed time for animations and fps
@@ -73,7 +73,7 @@ public class FlakeView extends View implements View.OnTouchListener{
                     if (flake.y > getHeight()) {
                         flake.y = 0 - flake.height;
                     }
-                    if (Math.abs(flake.x - mTouchX) < 30 && Math.abs(flake.y - mTouchY) < 30) {
+                    if (Math.abs(flake.x - mTouchX) < 10 && Math.abs(flake.y - mTouchY) < 10) {
                         it.remove();
                     }
                     flake.rotation = flake.rotation + (flake.rotationSpeed * secs);
@@ -96,7 +96,11 @@ public class FlakeView extends View implements View.OnTouchListener{
     }
 
     private void initWidget() {
-        droid = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+        droids = new ArrayList<Bitmap>();
+        droids.add(BitmapFactory.decodeResource(getResources(), R.drawable.easter1));
+        droids.add(BitmapFactory.decodeResource(getResources(), R.drawable.easter2));
+        droids.add(BitmapFactory.decodeResource(getResources(), R.drawable.easter3));
+        droids.add(BitmapFactory.decodeResource(getResources(), R.drawable.easter4));
         textScore = new Paint(Paint.ANTI_ALIAS_FLAG);
         textScore.setColor(Color.WHITE);
         textScore.setTextSize(30);
@@ -107,7 +111,7 @@ public class FlakeView extends View implements View.OnTouchListener{
 
     void initFlakes(int quantity) {
         for (int i = 0; i < quantity; ++i) {
-            flakes.add(Flake.createFlake(getWidth(), droid));
+            flakes.add(Flake.createFlake(getWidth(), droids));
         }
         setNumFlakes(quantity);
     }

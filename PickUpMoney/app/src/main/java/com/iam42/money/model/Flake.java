@@ -17,6 +17,7 @@ package com.iam42.money.model;
 
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -42,11 +43,12 @@ public class Flake {
      * Creates a new droidflake in the given xRange and with the given bitmap. Parameters of
      * location, size, rotation, and speed are randomly determined.
      */
-    public static Flake createFlake(float xRange, Bitmap originalBitmap) {
+    public static Flake createFlake(float xRange, ArrayList<Bitmap> originalBitmaps) {
         Flake flake = new Flake();
+        Bitmap useBitmap = originalBitmaps.get(((int) (Math.random() * (originalBitmaps.size() - 1))));
         // Size each flake with a width between 5 and 55 and a proportional height
         flake.width = (int)(30 + (float) Math.random() * 60);
-        float hwRatio = originalBitmap.getHeight() / originalBitmap.getWidth();
+        float hwRatio = useBitmap.getHeight() / useBitmap.getWidth();
         flake.height = (int)(flake.width * hwRatio);
 
         // Position the flake horizontally between the left and right of the range
@@ -65,7 +67,7 @@ public class Flake {
         // Get the cached bitmap for this size if it exists, otherwise create and cache one
         flake.bitmap = bitmapMap.get(flake.width);
         if (flake.bitmap == null) {
-            flake.bitmap = Bitmap.createScaledBitmap(originalBitmap,
+            flake.bitmap = Bitmap.createScaledBitmap(useBitmap,
                     (int) flake.width, (int) flake.height, true);
             bitmapMap.put(flake.width, flake.bitmap);
         }
